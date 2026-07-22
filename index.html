@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For Mendy</title>
+<style>
+  :root {
+    --bg: #0f0d14;
+    --bg-card: #1a1622;
+    --accent: #e8b76a;
+    --accent-soft: rgba(232, 183, 106, 0.15);
+    --text: #f2eee6;
+    --text-dim: #b9b2c3;
+    --border: #2c2735;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: radial-gradient(circle at top, #1c1726 0%, #0f0d14 60%);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  /* ---------- Password gate ---------- */
+  #gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+  #gate h1 { font-size: 1.6rem; margin-bottom: 8px; }
+  #gate p { color: var(--text-dim); margin-top: 0; }
+  #gate form { display: flex; gap: 8px; margin-top: 24px; flex-wrap: wrap; justify-content: center; }
+  #gate input[type="password"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 220px;
+  }
+  #gate button, .btn {
+    background: var(--accent);
+    color: #201a0a;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  #gate .error { color: #e8746a; min-height: 20px; margin-top: 12px; font-size: 0.9rem; }
+
+  /* ---------- Main content ---------- */
+  #content { display: none; }
+  .intro { margin-bottom: 40px; line-height: 1.6; color: var(--text-dim); }
+  .intro h1 { color: var(--text); font-size: 1.8rem; margin-bottom: 12px; }
+  .intro strong { color: var(--text); }
+
+  #status { color: var(--text-dim); font-size: 0.95rem; margin: 24px 0; }
+  #status.error { color: #e8746a; }
+
+  .track {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .track img.art {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .track .body { flex: 1; min-width: 0; }
+  .track h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .track p.desc {
+    margin: 6px 0 14px;
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  .track audio { width: 100%; height: 36px; }
+
+  footer { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 48px; opacity: 0.6; }
+</style>
+</head>
+<body>
+
+  <!-- ============================================================
+       PASSWORD GATE
+       This is a friendly gate, not real security — the password
+       lives in this file as plain text. Anyone who views the page
+       source can read it. It's meant to keep casual visitors out,
+       not to stop a determined person. To change the password,
+       edit the PASSWORD constant below.
+  ============================================================= -->
+  <section id="gate">
+    <h1>This page is just for you.</h1>
+    <p>Enter the password to continue.</p>
+    <form id="gate-form">
+      <input type="password" id="gate-input" placeholder="Password" autocomplete="off" />
+      <button type="submit">Enter</button>
+    </form>
+    <div class="error" id="gate-error"></div>
+  </section>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================= -->
+  <div class="wrap" id="content">
+    <div class="intro">
+      <h1>Hi Mendy!</h1>
+      <p>
+        This page is something I put together just for you — a simple, no-fuss way
+        to listen through a collection of my music and get a real sense of what I
+        make and how I think as a creator. No apps to install, no accounts to
+        sign into — just press play.
+      </p>
+      <p>
+        Every track below has a short note from me about it: what it's about,
+        where it came from, or what I was going for. I'd love for this to be the
+        start of a conversation between us — I've been hoping to find a chance to
+        work together, and figured the best way to make that case is to just let
+        the music speak for itself.
+      </p>
+      <p><strong>Thanks for taking the time. I hope you enjoy it.</strong></p>
+    </div>
+
+    <div id="status">Loading tracks…</div>
+    <div id="tracks"></div>
+
+    <footer>Made with care, just for Mendy.</footer>
+  </div>
+
+<script>
+/* ==================================================================
+   CONFIG — fill these in before publishing this page.
+   See README.md in this folder for step-by-step instructions.
+================================================================== */
+const PASSWORD = "mendyh2026";                 // the password Mendy will type in
+const GOOGLE_API_KEY = "AIzaSyA-GNc02nwyNsnQz0hSExskM-5Noe9ToRE";  // from Google Cloud Console
+const ROOT_FOLDER_ID = "1XaFbkQXz7X-s245qB-Fr8hIEREkkfGLB"; // the Drive folder holding one subfolder per track
+
+/* ==================================================================
+   PASSWORD GATE
+================================================================== */
+document.getElementById("gate-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const entered = document.getElementById("gate-input").value;
+  if (entered === PASSWORD) {
+    document.getElementById("gate").style.display = "none";
+    document.getElementById("content").style.display = "block";
+    loadTracks();
+  } else {
+    document.getElementById("gate-error").textContent = "That's not quite right — try again.";
+  }
+});
+
+/* ==================================================================
+   GOOGLE DRIVE — fetch tracks live so new ones show up automatically
+   without ever having to touch this file again.
+
+   Expected folder layout in Drive:
+     Root folder (ROOT_FOLDER_ID)
+       └── One subfolder per track, e.g. "01 - Song Name"
+             ├── an MP3 file
+             ├── a Google Doc (track description)
+             └── (optional) an image file (cover art)
+================================================================== */
+const DRIVE_API = "https://www.googleapis.com/drive/v3";
+
+async function driveList(query, fields) {
+  const url = `${DRIVE_API}/files?q=${encodeURIComponent(query)}&key=${GOOGLE_API_KEY}&fields=${encodeURIComponent("files(" + fields + ")")}&pageSize=1000`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Drive API error (${res.status}): ${await res.text()}`);
+  }
+  const data = await res.json();
+  return data.files || [];
+}
+
+async function fetchDocText(fileId) {
+  const url = `${DRIVE_API}/files/${fileId}/export?mimeType=text/plain&key=${GOOGLE_API_KEY}`;
+  const res = await fetch(url);
+  if (!res.ok) return "";
+  return (await res.text()).trim();
+}
+
+function driveFileStreamUrl(fileId) {
+  return `${DRIVE_API}/files/${fileId}?alt=media&key=${GOOGLE_API_KEY}`;
+}
+
+function driveImageUrl(fileId) {
+  // Works for images shared as "Anyone with the link"
+  return `https://drive.google.com/uc?export=view&id=${fileId}`;
+}
+
+async function loadTracks() {
+  const statusEl = document.getElementById("status");
+  const tracksEl = document.getElementById("tracks");
+
+  try {
+    const subfolders = await driveList(
+      `'${ROOT_FOLDER_ID}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+      "id,name"
+    );
+
+    if (subfolders.length === 0) {
+      statusEl.textContent = "No tracks found yet — check back soon.";
+      return;
+    }
+
+    // Keep a stable order: alphabetical by folder name (e.g. prefix folders with "01 - ", "02 - " to control order).
+    subfolders.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+    statusEl.textContent = `Loading ${subfolders.length} track${subfolders.length === 1 ? "" : "s"}…`;
+
+    for (const folder of subfolders) {
+      const files = await driveList(`'${folder.id}' in parents and trashed = false`, "id,name,mimeType");
+
+      const audioFile = files.find(f => f.mimeType && f.mimeType.startsWith("audio/"));
+      const docFile = files.find(f => f.mimeType === "application/vnd.google-apps.document");
+      const imageFile = files.find(f => f.mimeType && f.mimeType.startsWith("image/"));
+
+      const description = docFile ? await fetchDocText(docFile.id) : "";
+
+      const card = document.createElement("div");
+      card.className = "track";
+
+      const title = cleanTitle(folder.name);
+
+      card.innerHTML = `
+        ${imageFile ? `<img class="art" src="${driveImageUrl(imageFile.id)}" alt="" />` : ""}
+        <div class="body">
+          <h3>${escapeHtml(title)}</h3>
+          ${description ? `<p class="desc">${escapeHtml(description)}</p>` : ""}
+          ${audioFile
+            ? `<audio controls preload="none" src="${driveFileStreamUrl(audioFile.id)}"></audio>`
+            : `<p class="desc">(No audio file found in this folder)</p>`}
+        </div>
+      `;
+      tracksEl.appendChild(card);
+    }
+
+    statusEl.style.display = "none";
+  } catch (err) {
+    statusEl.classList.add("error");
+    statusEl.textContent =
+      "Couldn't load the tracks. If you're setting this page up: double-check the Drive folder is shared as " +
+      "\"Anyone with the link\" and that the API key / folder ID above are correct. (" + err.message + ")";
+    console.error(err);
+  }
+}
+
+function cleanTitle(folderName) {
+  // Strips a leading ordering prefix like "01 - " or "1. " from folder names.
+  return folderName.replace(/^\s*\d+\s*[-.)]\s*/, "").trim();
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
