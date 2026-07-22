@@ -103,18 +103,65 @@
 
   /* ---------- Main content ---------- */
   #content { display: none; }
-  .intro { margin-bottom: 44px; }
+  .intro {
+    margin-bottom: 40px;
+    padding: 40px 36px;
+    border-radius: 24px;
+    background:
+      linear-gradient(160deg, rgba(255, 107, 107, 0.14), rgba(255, 182, 72, 0.08) 50%, rgba(139, 92, 246, 0.10)),
+      var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  }
+  .intro-emblem {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+    margin-bottom: 18px;
+  }
+  .intro-emblem svg { width: 22px; height: 22px; fill: #1a0e05; }
+  .intro-eyebrow {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent-b);
+    margin-bottom: 16px;
+  }
   .intro h1 {
-    font-size: 2.1rem;
-    margin: 0 0 16px;
+    font-size: 2.2rem;
+    margin: 0 0 18px;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #ffffff 30%, var(--accent-b) 100%);
+    background: linear-gradient(135deg, #ffffff 20%, var(--accent-b) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
-  .intro p { color: var(--text-dim); line-height: 1.7; font-size: 1rem; margin: 0 0 16px; }
+  .intro p { color: rgba(245, 240, 248, 0.86); line-height: 1.75; font-size: 1.02rem; margin: 0 0 16px; }
   .intro strong { color: var(--text); }
+  .intro .signoff {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    font-weight: 700;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
 
   .section-label {
     text-transform: uppercase;
@@ -290,6 +337,10 @@
   ============================================================= -->
   <div class="wrap" id="content">
     <div class="intro">
+      <div class="intro-emblem">
+        <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" fill="none" stroke="#1a0e05" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="intro-eyebrow">A little something for you</div>
       <h1>Hi Mendy!</h1>
       <p>
         This page is something I put together just for you — a simple, no-fuss way
@@ -304,7 +355,7 @@
         work together, and figured the best way to make that case is to just let
         the music speak for itself.
       </p>
-      <p><strong>Thanks for taking the time. I hope you enjoy it.</strong></p>
+      <div class="signoff">🎧 Thanks for taking the time — I hope you enjoy it.</div>
     </div>
 
     <div class="section-label">Tracks</div>
