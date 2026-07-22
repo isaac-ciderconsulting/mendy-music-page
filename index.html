@@ -6,23 +6,34 @@
 <title>For Mendy</title>
 <style>
   :root {
-    --bg: #0f0d14;
-    --bg-card: #1a1622;
-    --accent: #e8b76a;
-    --accent-soft: rgba(232, 183, 106, 0.15);
-    --text: #f2eee6;
-    --text-dim: #b9b2c3;
-    --border: #2c2735;
+    --bg-deep: #0a0912;
+    --text: #f5f2f8;
+    --text-dim: #a79fb8;
+    --accent-a: #ff6b6b;
+    --accent-b: #ffb648;
+    --accent-c: #8b5cf6;
+    --card-bg: rgba(255, 255, 255, 0.045);
+    --card-bg-hover: rgba(255, 255, 255, 0.07);
+    --card-border: rgba(255, 255, 255, 0.09);
+    --card-border-hover: rgba(255, 255, 255, 0.18);
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    background: radial-gradient(circle at top, #1c1726 0%, #0f0d14 60%);
     color: var(--text);
     min-height: 100vh;
+    background-color: var(--bg-deep);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(255, 107, 107, 0.22), transparent 42%),
+      radial-gradient(circle at 88% 12%, rgba(139, 92, 246, 0.20), transparent 45%),
+      radial-gradient(circle at 50% 100%, rgba(255, 182, 72, 0.14), transparent 55%);
+    background-attachment: fixed;
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 56px 20px 90px; }
+
+  ::selection { background: var(--accent-a); color: #1a0e05; }
 
   /* ---------- Password gate ---------- */
   #gate {
@@ -30,73 +41,223 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    text-align: center;
     padding: 24px;
   }
-  #gate h1 { font-size: 1.6rem; margin-bottom: 8px; }
-  #gate p { color: var(--text-dim); margin-top: 0; }
-  #gate form { display: flex; gap: 8px; margin-top: 24px; flex-wrap: wrap; justify-content: center; }
-  #gate input[type="password"] {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 1rem;
-    width: 220px;
+  .gate-card {
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    background: var(--card-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 44px 36px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
   }
-  #gate button, .btn {
-    background: var(--accent);
-    color: #201a0a;
+  .gate-emblem {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(255, 107, 107, 0.35);
+  }
+  .gate-emblem svg { width: 26px; height: 26px; fill: #1a0e05; }
+  #gate h1 { font-size: 1.4rem; margin: 0 0 6px; letter-spacing: -0.01em; }
+  #gate p.sub { color: var(--text-dim); margin: 0 0 28px; font-size: 0.95rem; }
+  #gate form { display: flex; flex-direction: column; gap: 12px; }
+  #gate input[type="password"] {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    padding: 13px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  #gate input[type="password"]:focus {
+    border-color: var(--accent-a);
+    background: rgba(255, 255, 255, 0.09);
+  }
+  .btn, #gate button {
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    color: #1a0e05;
     border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: 600;
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-weight: 700;
     cursor: pointer;
     font-size: 1rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.25);
   }
-  #gate .error { color: #e8746a; min-height: 20px; margin-top: 12px; font-size: 0.9rem; }
+  .btn:hover, #gate button:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(255, 107, 107, 0.35); }
+  .btn:active, #gate button:active { transform: translateY(0); }
+  #gate .error { color: #ff8a8a; min-height: 20px; margin-top: 4px; font-size: 0.88rem; }
 
   /* ---------- Main content ---------- */
   #content { display: none; }
-  .intro { margin-bottom: 40px; line-height: 1.6; color: var(--text-dim); }
-  .intro h1 { color: var(--text); font-size: 1.8rem; margin-bottom: 12px; }
+  .intro { margin-bottom: 44px; }
+  .intro h1 {
+    font-size: 2.1rem;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 30%, var(--accent-b) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .intro p { color: var(--text-dim); line-height: 1.7; font-size: 1rem; margin: 0 0 16px; }
   .intro strong { color: var(--text); }
 
-  #status { color: var(--text-dim); font-size: 0.95rem; margin: 24px 0; }
-  #status.error { color: #e8746a; }
+  .section-label {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-weight: 700;
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--card-border), transparent);
+  }
+
+  #status {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin: 28px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  #status.error { color: #ff8a8a; }
+  .spinner {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--card-border);
+    border-top-color: var(--accent-a);
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   .track {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-bottom: 14px;
     display: flex;
-    gap: 16px;
+    gap: 18px;
     align-items: flex-start;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    opacity: 0;
+    animation: rise 0.5s ease forwards;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .track:hover { border-color: var(--card-border-hover); background: var(--card-bg-hover); transform: translateY(-2px); }
+
+  .track-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    min-width: 40px;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.85;
+    line-height: 1.2;
   }
   .track img.art {
-    width: 64px;
-    height: 64px;
-    border-radius: 8px;
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
     object-fit: cover;
-    background: var(--border);
+    background: var(--card-border);
     flex-shrink: 0;
   }
   .track .body { flex: 1; min-width: 0; }
-  .track h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .track h3 { margin: 0 0 8px; font-size: 1.12rem; letter-spacing: -0.01em; }
   .track p.desc {
-    margin: 6px 0 14px;
+    margin: 0 0 16px;
     color: var(--text-dim);
     font-size: 0.92rem;
-    line-height: 1.5;
+    line-height: 1.6;
     white-space: pre-wrap;
   }
-  .track audio { width: 100%; height: 36px; }
+  .track .read-more {
+    background: none;
+    border: none;
+    color: var(--accent-b);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 0 14px;
+    display: block;
+  }
 
-  footer { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 48px; opacity: 0.6; }
+  /* ---------- Custom player ---------- */
+  .player { display: flex; align-items: center; gap: 14px; }
+  .play-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.25);
+    transition: transform 0.15s ease;
+  }
+  .play-btn:hover { transform: scale(1.06); }
+  .play-btn:active { transform: scale(0.97); }
+  .play-btn svg { width: 16px; height: 16px; fill: #1a0e05; }
+  .play-btn .icon-pause { display: none; }
+  .play-btn.playing .icon-play { display: none; }
+  .play-btn.playing .icon-pause { display: block; }
+
+  .progress-wrap { flex: 1; min-width: 0; }
+  .progress-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+    border-radius: 3px;
+  }
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  footer { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 56px; opacity: 0.55; }
 </style>
 </head>
 <body>
@@ -110,13 +271,18 @@
        edit the PASSWORD constant below.
   ============================================================= -->
   <section id="gate">
-    <h1>This page is just for you.</h1>
-    <p>Enter the password to continue.</p>
-    <form id="gate-form">
-      <input type="password" id="gate-input" placeholder="Password" autocomplete="off" />
-      <button type="submit">Enter</button>
-    </form>
-    <div class="error" id="gate-error"></div>
+    <div class="gate-card">
+      <div class="gate-emblem">
+        <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" fill="none" stroke="#1a0e05" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1>This page is just for you.</h1>
+      <p class="sub">Enter the password to continue.</p>
+      <form id="gate-form">
+        <input type="password" id="gate-input" placeholder="Password" autocomplete="off" />
+        <button type="submit">Enter</button>
+      </form>
+      <div class="error" id="gate-error"></div>
+    </div>
   </section>
 
   <!-- ============================================================
@@ -141,7 +307,8 @@
       <p><strong>Thanks for taking the time. I hope you enjoy it.</strong></p>
     </div>
 
-    <div id="status">Loading tracks…</div>
+    <div class="section-label">Tracks</div>
+    <div id="status"><span class="spinner"></span> Loading tracks…</div>
     <div id="tracks"></div>
 
     <footer>Made with care, just for Mendy.</footer>
@@ -221,50 +388,157 @@ async function loadTracks() {
     );
 
     if (subfolders.length === 0) {
-      statusEl.textContent = "No tracks found yet — check back soon.";
+      statusEl.innerHTML = "No tracks found yet — check back soon.";
       return;
     }
 
     // Keep a stable order: alphabetical by folder name (e.g. prefix folders with "01 - ", "02 - " to control order).
     subfolders.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
 
-    statusEl.textContent = `Loading ${subfolders.length} track${subfolders.length === 1 ? "" : "s"}…`;
+    statusEl.innerHTML = `<span class="spinner"></span> Loading ${subfolders.length} track${subfolders.length === 1 ? "" : "s"}…`;
 
+    let index = 0;
     for (const folder of subfolders) {
+      index++;
       const files = await driveList(`'${folder.id}' in parents and trashed = false`, "id,name,mimeType");
 
       const audioFile = files.find(f => f.mimeType && f.mimeType.startsWith("audio/"));
       const docFile = files.find(f => f.mimeType === "application/vnd.google-apps.document");
       const imageFile = files.find(f => f.mimeType && f.mimeType.startsWith("image/"));
 
-      const description = docFile ? await fetchDocText(docFile.id) : "";
+      const title = cleanTitle(folder.name);
+      const description = docFile ? stripLeadingTitle(await fetchDocText(docFile.id), title) : "";
+      const trackNum = String(index).padStart(2, "0");
+      const isLong = description.length > 220;
+      const shortText = isLong ? description.slice(0, 220).trim() + "…" : description;
 
       const card = document.createElement("div");
       card.className = "track";
-
-      const title = cleanTitle(folder.name);
+      card.style.animationDelay = `${Math.min(index * 60, 400)}ms`;
 
       card.innerHTML = `
+        <div class="track-num">${trackNum}</div>
         ${imageFile ? `<img class="art" src="${driveImageUrl(imageFile.id)}" alt="" />` : ""}
         <div class="body">
           <h3>${escapeHtml(title)}</h3>
-          ${description ? `<p class="desc">${escapeHtml(description)}</p>` : ""}
-          ${audioFile
-            ? `<audio controls preload="none" src="${driveFileStreamUrl(audioFile.id)}"></audio>`
-            : `<p class="desc">(No audio file found in this folder)</p>`}
+          ${description ? `<p class="desc" data-full="${escapeAttr(description)}" data-short="${escapeAttr(shortText)}">${escapeHtml(shortText)}</p>` : ""}
+          ${isLong ? `<button class="read-more" type="button">Read more</button>` : ""}
+          ${audioFile ? renderPlayer() : `<p class="desc">(No audio file found in this folder)</p>`}
         </div>
       `;
+
       tracksEl.appendChild(card);
+
+      if (isLong) {
+        const descEl = card.querySelector(".desc");
+        const toggleBtn = card.querySelector(".read-more");
+        let expanded = false;
+        toggleBtn.addEventListener("click", () => {
+          expanded = !expanded;
+          descEl.textContent = expanded ? descEl.dataset.full : descEl.dataset.short;
+          toggleBtn.textContent = expanded ? "Show less" : "Read more";
+        });
+      }
+
+      if (audioFile) {
+        wirePlayer(card, driveFileStreamUrl(audioFile.id));
+      }
     }
 
     statusEl.style.display = "none";
   } catch (err) {
     statusEl.classList.add("error");
-    statusEl.textContent =
+    statusEl.innerHTML =
       "Couldn't load the tracks. If you're setting this page up: double-check the Drive folder is shared as " +
-      "\"Anyone with the link\" and that the API key / folder ID above are correct. (" + err.message + ")";
+      "\"Anyone with the link\" and that the API key / folder ID above are correct. (" + escapeHtml(err.message) + ")";
     console.error(err);
   }
+}
+
+/* ==================================================================
+   CUSTOM AUDIO PLAYER
+   Only one track plays at a time — starting a new one pauses whatever
+   was playing before.
+================================================================== */
+let activeAudio = null;
+let activeBtn = null;
+
+function renderPlayer() {
+  return `
+    <div class="player">
+      <button class="play-btn" type="button" aria-label="Play">
+        <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+      </button>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="time-row"><span class="time-current">0:00</span><span class="time-duration">0:00</span></div>
+      </div>
+    </div>
+  `;
+}
+
+function wirePlayer(card, src) {
+  const btn = card.querySelector(".play-btn");
+  const bar = card.querySelector(".progress-bar");
+  const fill = card.querySelector(".progress-fill");
+  const timeCurrent = card.querySelector(".time-current");
+  const timeDuration = card.querySelector(".time-duration");
+
+  let audio = null;
+
+  function ensureAudio() {
+    if (audio) return audio;
+    audio = new Audio(src);
+    audio.preload = "none";
+    audio.addEventListener("loadedmetadata", () => {
+      timeDuration.textContent = formatTime(audio.duration);
+    });
+    audio.addEventListener("timeupdate", () => {
+      if (audio.duration) fill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+      timeCurrent.textContent = formatTime(audio.currentTime);
+    });
+    audio.addEventListener("ended", () => {
+      btn.classList.remove("playing");
+      fill.style.width = "0%";
+      timeCurrent.textContent = "0:00";
+    });
+    return audio;
+  }
+
+  btn.addEventListener("click", () => {
+    ensureAudio();
+
+    if (activeAudio && activeAudio !== audio) {
+      activeAudio.pause();
+      if (activeBtn) activeBtn.classList.remove("playing");
+    }
+
+    if (audio.paused) {
+      audio.play();
+      btn.classList.add("playing");
+      activeAudio = audio;
+      activeBtn = btn;
+    } else {
+      audio.pause();
+      btn.classList.remove("playing");
+    }
+  });
+
+  bar.addEventListener("click", (e) => {
+    ensureAudio();
+    if (!audio.duration) return;
+    const rect = bar.getBoundingClientRect();
+    const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+    audio.currentTime = ratio * audio.duration;
+  });
+}
+
+function formatTime(seconds) {
+  if (!isFinite(seconds)) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
 }
 
 function cleanTitle(folderName) {
@@ -272,10 +546,21 @@ function cleanTitle(folderName) {
   return folderName.replace(/^\s*\d+\s*[-.)]\s*/, "").trim();
 }
 
+function stripLeadingTitle(description, title) {
+  // Doc descriptions often repeat the track title as their first line
+  // (e.g. "Acoustic Pulse:\n..."), which just duplicates the heading above it.
+  const escaped = title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return description.replace(new RegExp(`^\\s*${escaped}\\s*:?\\s*\\n+`, "i"), "").trim();
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
   return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  return escapeHtml(str).replace(/"/g, "&quot;");
 }
 </script>
 </body>
